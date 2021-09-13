@@ -1,10 +1,13 @@
-import React,{useState} from 'react'
-import axios from "axios"
+import React,{useState} from 'react';
+import axios from "axios";
+import {Link} from "react-router-dom";
+import Success from './Success';
 const Register = () => {
     const[name,setName]=useState(null);
     const[email,setEmail]=useState(null);
     const[password,setPassword]=useState(null);
     const[mobile,setMobile]=useState(null);
+    const[errorMessage,setMessageError]=useState([]);
     const saveData=e=>
     {
        e.preventDefault()
@@ -14,8 +17,13 @@ const Register = () => {
            console.log(response);
        })
        .catch(error=>{
-           console.log(error.response);
+           console.log(error.response.status);
+           if(error.response.status===200)
+           setMessageError("Login Successful")
+           else
+           setMessageError("Something went wrong please try again")
        })
+       console.log(errorMessage)
     }
     return (
         <div className="container" style={{margin:"3%"}}>
@@ -39,6 +47,10 @@ const Register = () => {
                     <input type="string" className="form-control" id="exampleInputPassword1" onChange={(e)=>setMobile(e.target.value)}/>
                 </div>
                 <button type="submit" className="btn btn-primary" onClick={saveData}>Submit</button>
+                <Link to="/result_page">
+                        <Success errorMessage={errorMessage}/>
+                    </Link>
+    
             </form>
         </div>
     )
